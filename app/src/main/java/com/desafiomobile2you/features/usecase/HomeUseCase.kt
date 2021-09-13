@@ -1,6 +1,5 @@
 package com.desafiomobile2you.features.usecase
 
-import com.desafiomobile2you.api.ApiService
 import com.desafiomobile2you.extensions.getFullImageUrl
 import com.desafiomobile2you.features.home.repository.HomeRepository
 import com.desafiomobile2you.model.Movies
@@ -27,4 +26,7 @@ class HomeUseCase {
             }
         }
     }
+
+    suspend fun getMovieDetailsById(id: Int) =
+        homeRepository.getMovieDetailsById(id)
 }

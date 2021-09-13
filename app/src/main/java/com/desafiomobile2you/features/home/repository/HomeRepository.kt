@@ -14,4 +14,11 @@ class HomeRepository: BaseRepository() {
         }
 
     }
+
+    suspend fun getMovieDetailsById(id: Int): ResponseApi {
+        return safeApiCall {
+            ApiService.tmdbApi.getMovieDetailsById(id)
+        }
+
+    }
 }

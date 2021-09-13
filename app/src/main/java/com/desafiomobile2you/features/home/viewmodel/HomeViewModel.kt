@@ -2,14 +2,13 @@ package com.desafiomobile2you.features.home.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.desafiomobile2you.base.BaseViewModel
 import com.desafiomobile2you.features.usecase.HomeUseCase
 import com.desafiomobile2you.model.Result
-import com.desafiomobile2you.utils.ResponseApi
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel : BaseViewModel() {
 
     private val homeUseCase = HomeUseCase()
 
@@ -27,15 +26,27 @@ class HomeViewModel : ViewModel() {
 
     fun getSimilarMovies() {
         viewModelScope.launch {
-           when(val responseApi = homeUseCase.getSimilarMovies()){
-               is ResponseApi.Success ->{
-                   _onSuccessSimilar.postValue(responseApi.data as? List<Result>)
-               }
+            callApi(
+                suspend {homeUseCase.getSimilarMovies()},
+                onSuccess = {
+                    val result = it as? List<*>
+                    _onSuccessSimilar.postValue(
+                        result?.filterIsInstance<Result>()
+                    )
 
-               is ResponseApi.Error ->{
-                    _onErrorSimilar.postValue(responseApi.message)
-               }
-           }
+                },
+            )
+        }
+    }
+
+    fun getMovieDetailsById(id: Int) {
+        viewModelScope.launch {
+            callApi(
+                suspend { homeUseCase.getMovieDetailsById(id) },
+                onSuccess = {
+                    it
+                }
+            )
         }
     }
 }
