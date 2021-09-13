@@ -31,7 +31,24 @@ class HomeFragment : Fragment() {
             viewModel = ViewModelProvider(it)[HomeViewModel::class.java]
 
             viewModel.getSimilarMovies()
+
+            setupObeservables()
+
         }
+    }
+
+    private fun setupObeservables() {
+        activity?.let {
+            viewModel.onSuccessSimilar.observe(it,{
+                it
+            })
+
+            viewModel.onErrorSimilar.observe(it,{
+                it
+            })
+        }
+
+
     }
 
     override fun onDestroyView() {

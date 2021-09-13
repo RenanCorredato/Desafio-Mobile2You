@@ -10,8 +10,8 @@ class HomeUseCase {
 
     private val homeRepository = HomeRepository()
 
-    suspend fun getSimilarMovies() {
-        when (val responseApi = homeRepository.getSimilarMovies()) {
+    suspend fun getSimilarMovies():ResponseApi {
+       return when (val responseApi = homeRepository.getSimilarMovies()) {
             is ResponseApi.Success -> {
                 val data = responseApi.data as? Movies
                 val result = data?.results?.map {
@@ -19,11 +19,11 @@ class HomeUseCase {
                     it.posterPath = it.posterPath.getFullImageUrl()
                     it
                 }
-                result
+                ResponseApi.Success(result)
             }
 
             is ResponseApi.Error -> {
-
+                responseApi
             }
         }
     }
